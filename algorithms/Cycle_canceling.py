@@ -1,6 +1,25 @@
 from .max_flow_augmenting import *
 
-def cycle_canceling(graph, src, dst):
+def cycle_canceling(graph):
+    #find sinks and sources
+    s_bag = []
+    t_bag = []
+    for node in graph.nodes():
+        if 'b' in graph.nodes[node]:
+            i = graph.nodes[node]['b']
+            if i < 0:
+                t_bag.append((node,-i))
+            elif i > 0:
+                s_bag.append((node,i))
+    #add a new source node that attach all sources
+    src = len(graph.nodes()) #new node id
+    for node,i in s_bag:
+        graph.add_edge(src, node, weight=0, capacity=i, flow=0)
+    #add a new sink node that attach all sinks
+    dst = len(graph.nodes()) #new node id
+    for node,i in t_bag:
+        graph.add_edge(node, dst, weight=0, capacity=i, flow=0)
+
     #Establish a feasible flow x in the network => max flow algorithms
     graph, max_flow = max_flow_augmenting_path(graph, src, dst)
 
@@ -9,16 +28,16 @@ def cycle_canceling(graph, src, dst):
 
     #check negative path
     neg_cycle = NegCycleBellmanFord(residual_network, src, dst)
-    print("negative circle is :", end=" ")
-    print(neg_cycle)
+    #print("negative circle is :", end=" ")
+    #print(neg_cycle)
     while len(neg_cycle)!=0:
         #augment units of Flow with min flow of the cycle in Gx
         residual_network = augment_graph(residual_network,neg_cycle)
 
         #find next negative cycle
         neg_cycle = NegCycleBellmanFord(residual_network, src, dst)
-        print("negative circle is :", end=" ")
-        print(neg_cycle)
+        #print("negative circle is :", end=" ")
+        #print(neg_cycle)
     #residual network back to graph
     graph = residual_to_graph(residual_network)
     #print solution
