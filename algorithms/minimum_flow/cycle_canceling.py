@@ -1,4 +1,4 @@
-from .max_flow_augmenting import *
+from ..maximum_flow.generic_augmenting_path import *
 
 def cycle_canceling(graph):
     #find sinks and sources
@@ -21,7 +21,7 @@ def cycle_canceling(graph):
         graph.add_edge(node, dst, weight=0, capacity=i, flow=0)
 
     #Establish a feasible flow x in the network => max flow algorithms
-    graph, max_flow = max_flow_augmenting_path(graph, src, dst)
+    graph, max_flow = generic_augmenting_path(graph, src, dst)
 
     #transform graph to residual network
     residual_network = graph_to_residual(graph)

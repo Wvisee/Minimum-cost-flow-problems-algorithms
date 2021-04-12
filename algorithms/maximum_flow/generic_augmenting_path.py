@@ -76,8 +76,34 @@ def FordFulkerson(graph, src, dst):
 
 	return graph,max_flow
 
-def max_flow_augmenting_path(graph, src, dst):
+def generic_augmenting_path(graph, src=-1, dst=-1):
+	if src==-1 and dst==-1:
+		src, dst = add_source_sink(graph)
+		graph, maxflow = FordFulkerson(graph, src, dst)
+		print(maxflow)
+	else:
 		graph, maxflow = FordFulkerson(graph, src, dst)
 		return graph, maxflow
+
+def add_source_sink(graph):
+    #find sinks and sources
+    s_bag = []
+    t_bag = []
+    for node in graph.nodes():
+        if 'b' in graph.nodes[node]:
+            i = graph.nodes[node]['b']
+            if i < 0:
+                t_bag.append((node,-i))
+            elif i > 0:
+                s_bag.append((node,i))
+    #add a new source node that attach all sources
+    source = len(graph.nodes()) #new node id
+    for node,i in s_bag:
+        graph.add_edge(source, node, weight=0, capacity=float("Inf"), flow=0)
+    #add a new sink node that attach all sinks
+    sink = len(graph.nodes()) #new node id
+    for node,i in t_bag:
+        graph.add_edge(node, sink, weight=0, capacity=float("Inf"), flow=0)
+    return source, sink
 
 # This code is contributed by Neelam Yadav
