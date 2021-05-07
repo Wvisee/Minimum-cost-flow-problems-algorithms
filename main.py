@@ -5,6 +5,7 @@ from algorithms.minimum_flow.cycle_canceling import *
 from algorithms.minimum_flow.successive_shortest_path_top_coder import *
 from algorithms.minimum_flow.primal_dual import *
 from algorithms.minimum_flow.out_of_kilter import *
+from algorithms.minimum_flow.constrainedBoP import *
 #maximum flow algorithms
 from algorithms.maximum_flow.generic_augmenting_path import *
 from algorithms.maximum_flow.preflow_push import *
@@ -91,6 +92,19 @@ G6.add_edge(2, 3, weight=1, capacity=5, flow=0)
 G6.nodes[0]['b'] = 6
 G6.nodes[3]['b'] = -6
 
+#from matlab code
+G7 = nx.Graph()
+G7.add_edge(0, 1, weight=1, capacity=4, flow=0)
+G7.add_edge(0, 2, weight=1, capacity=4, flow=0)
+G7.add_edge(1, 2, weight=1, capacity=4, flow=0)
+G7.add_edge(2, 3, weight=1, capacity=4, flow=0)
+G7.add_edge(3, 6, weight=1, capacity=4, flow=0)
+G7.add_edge(3, 5, weight=1, capacity=4, flow=0)
+G7.add_edge(3, 4, weight=1, capacity=4, flow=0)
+G7.add_edge(5, 6, weight=1, capacity=4, flow=0)
+G7.add_edge(6, 4, weight=1, capacity=4, flow=0)
+G7.add_edge(5, 4, weight=1, capacity=4, flow=0)
+
 ###############################
 # Run Maximum Flow Algorithms #
 ###############################
@@ -132,3 +146,5 @@ primal_dual(G3.copy())
 primal_dual(G4.copy())
 primal_dual(G5.copy())
 primal_dual(G6.copy())
+#Bop
+constrainedBop(G7,15.0,False)
