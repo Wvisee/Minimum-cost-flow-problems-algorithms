@@ -5,7 +5,8 @@ from algorithms.minimum_flow.cycle_canceling import *
 from algorithms.minimum_flow.successive_shortest_path import *
 from algorithms.minimum_flow.primal_dual import *
 from algorithms.minimum_flow.out_of_kilter import *
-from algorithms.minimum_flow.constrainedBoP import *
+from algorithms.minimum_flow.constrainedBoP_hitting import *
+from algorithms.minimum_flow.constrainedBoP_nonhitting import *
 #maximum flow algorithms
 from algorithms.maximum_flow.generic_augmenting_path import *
 from algorithms.maximum_flow.preflow_push import *
@@ -28,6 +29,7 @@ G.add_edge(3, 2, weight=8, capacity=9, flow=0)
 G.add_edge(4, 3, weight=9, capacity=7, flow=0)
 G.add_edge(3, 5, weight=5, capacity=20, flow=0)
 G.add_edge(4, 5, weight=1, capacity=4, flow=0)
+G.add_edge(5, 0, weight=0, capacity=4, flow=0)
 G.nodes[0]['b'] = 23
 G.nodes[5]['b'] = -23
 list_of_dataset.append(G)
@@ -54,12 +56,12 @@ G3.add_edge(1, 2, weight=5, capacity=40, flow=0)
 G3.add_edge(2, 4, weight=25, capacity=40, flow=0)
 G3.add_edge(2, 5, weight=8, capacity=60, flow=0)
 G3.add_edge(3, 4, weight=30, capacity=60, flow=0)
-G3.add_edge(3, 6, weight=45, capacity=100, flow=0)
+G3.add_edge(3, 6, weight=30, capacity=100, flow=0)
 G3.add_edge(4, 6, weight=10, capacity=40, flow=0)
 G3.add_edge(4, 7, weight=10, capacity=40, flow=0)
 G3.add_edge(5, 6, weight=30, capacity=50, flow=0)
 G3.add_edge(5, 7, weight=15, capacity=80, flow=0)
-G3.add_edge(6, 7, weight=45, capacity=100, flow=0)
+G3.add_edge(6, 7, weight=30, capacity=100, flow=0)
 G3.nodes[0]['b'] = 100
 G3.nodes[6]['b'] = -25
 G3.nodes[7]['b'] = -75
@@ -73,6 +75,8 @@ G4.add_edge(1, 2, weight=2, capacity=2, flow=0)
 G4.add_edge(1, 3, weight=8, capacity=3, flow=0)
 G4.add_edge(2, 3, weight=3, capacity=3, flow=0)
 G4.add_edge(2, 4, weight=4, capacity=2, flow=0)
+G4.add_edge(3, 0, weight=0, capacity=4, flow=0)
+G4.add_edge(4, 0, weight=0, capacity=4, flow=0)
 G4.nodes[0]['b'] = 5
 G4.nodes[3]['b'] = -3
 G4.nodes[4]['b'] = -2
@@ -148,3 +152,19 @@ for i in range(len(list_of_dataset)):
     graph, flow, cost = out_of_kilter(list_of_dataset[i].copy())
     print("Solution of dataset n°"+str(i+1)+" : Flow = "+str(flow)+" : Cost = "+str(cost))
     #print_graph(graph)
+#Constrained hitting Bag-Of-Paths
+print("-- Constrained hitting bag-of-paths (with infinite capacity consider)")
+for i in range(len(list_of_dataset)):
+    graph, flow, cost = constrainedBop_hitting(list_of_dataset[i].copy())
+    print("Solution of dataset n°"+str(i+1)+" : Flow = "+str(flow)+" : Cost = "+str(cost))
+    #print_graph(graph)
+#Constrained non-hitting Bag-Of-Paths
+print("-- Constrained non-hitting bag-of-paths (with infinite capacity consider)")
+for i in range(len(list_of_dataset)):
+    graph, flow, cost = constrainedBop_nonhitting(list_of_dataset[i].copy())
+    print("Solution of dataset n°"+str(i+1)+" : Flow = "+str(flow)+" : Cost = "+str(cost))
+    #print_graph(graph)
+
+#constrainedBop_nonhitting(G4)
+#bop_brut(G7)
+#exit()
