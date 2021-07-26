@@ -148,6 +148,43 @@ def add_source_sink_maxflow(graph):
     graph.nodes[sink]['b'] = -1
     return source, sink
 
+def add_source_sink_maxflow_rsp_with_constraint(graph):
+    #find sinks and sources
+    s_bag = []
+    t_bag = []
+    for node in graph.nodes():
+        if 'b' in graph.nodes[node]:
+            i = graph.nodes[node]['b']
+            if i < 0:
+                t_bag.append(node)
+                del graph.nodes[node]['b']
+                graph.nodes[node]['c'] = i
+            elif i > 0:
+                s_bag.append(node)
+                del graph.nodes[node]['b']
+                graph.nodes[node]['c'] = i
+    #add a new source node that attach all sources
+    source = len(graph.nodes()) #new node id
+    for node in s_bag:
+        #get max flow that can go out the node and put it has the capacity of source -> node
+        total = 0
+        for i,j in graph.edges():
+            if i==node:
+                total = total + graph[i][j]["capacity"]
+        graph.add_edge(source, node, weight=0, capacity=total, flow=0)
+    graph.nodes[source]['b'] = 1
+    #add a new sink node that attach all sinks
+    sink = len(graph.nodes()) #new node id
+    for node in t_bag:
+        #get max flow that can go out the node and put it has the capacity of source -> node
+        total = 0
+        for i,j in graph.edges():
+            if j==node:
+                total = total + graph[i][j]["capacity"]
+        graph.add_edge(node, sink, weight=0, capacity=total, flow=0)
+    graph.nodes[sink]['b'] = -1
+    return source, sink
+
 #attach all the source node to one single node
 #attach all the sink node to one single node
 #the capacity of the edges will be egal to the demand/offer of the node
@@ -193,6 +230,18 @@ def remove_source_sink(graph, source, sink):
             del graph.nodes[node]['c']
     graph.remove_node(source)
     graph.remove_node(sink)
+
+def get_source_sink(graph):
+    source = 0
+    sink = 0
+    for node in graph.nodes():
+        if 'b' in graph.nodes[node]:
+            i = graph.nodes[node]['b']
+            if i < 0:
+                sink = node
+            elif i > 0:
+                source = node
+    return source, sink
 
 #print all the edges and the data contained in the edges
 def print_graph(graph):
