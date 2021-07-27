@@ -247,3 +247,9 @@ def get_source_sink(graph):
 def print_graph(graph):
     for a,b in graph.edges():
         print(str(a)+","+str(b)+" = "+str(graph.get_edge_data(a,b)))
+
+def print_matrix(A):
+    for i in range(len(A)):
+        for j in range(len(A[0])):
+            print(str(A[i,j])+" ", end='')
+        print("")

@@ -10,7 +10,7 @@ into python3 code
 It is the third algorithm of the paper
 Theta must lie between 0.00000001 and 20.0
 '''
-def constrainedBop_nonhitting(graph, e_g=1.0, theta=20.0):
+def constrainedBop_nonhitting(graph, e_g=2.0, theta=20.0):
     #Initialisation
     nr = len(graph.nodes()) #because size() in mathlab return the size of matrix
     nc = len(graph.nodes()) #matrix is same width than length
@@ -134,5 +134,6 @@ def KillingRatesForNonHittingPaths(A,sigma_in,sigma_out,e_g):
     epsillon = ((sigma_out - n_ref_zero)/q).max() + e_g
     n_ref = n_ref_zero + np.dot(epsillon,q)
     alpha = np.divide(sigma_out,n_ref)
+    alpha = np.nan_to_num(alpha, nan=0.0)
 
     return alpha, n_ref

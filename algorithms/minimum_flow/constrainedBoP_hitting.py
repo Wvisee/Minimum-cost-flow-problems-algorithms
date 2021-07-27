@@ -86,6 +86,7 @@ def constrainedBop_hitting(graph, theta=20.0):
     #N_exp_h = ((e ./ mu_out_h)*(e ./ mu_in_h)' - (Z_h*diag(sigma_out)*Z_h)') .* (diag(diag(Z))*W);
     diag_sigma_out = np.zeros((nr, nr), float)
     np.fill_diagonal(diag_sigma_out,np.diag(sigma_out).reshape(-1,1))
+
     N_exp_h = (np.dot((e/mu_out_h),np.transpose((e/mu_in_h))) -  np.transpose(np.dot(np.dot(Z_h,diag_sigma_out),Z_h)))  * np.dot(np.diag(np.diag(Z)),W)
     for i in range(nr):
         for j in range(nc):

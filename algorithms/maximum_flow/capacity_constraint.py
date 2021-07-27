@@ -28,13 +28,14 @@ def capacity_constraint(graph, theta=2):
     C0 = np.full((nr,nc), maxi)
     for u,v in graph.edges():
         C0[u][v]=1
-    C0[source][sink] = 10
+    C0[source][sink] = 50
 
     #nargin is the number of argument of the function => maintained in def signature
     S = np.zeros((nr,nc))
     for u,v in graph.edges():
         capacity = graph[u][v]["capacity"]
         S[u][v]=capacity
+
 
     '''
     source = 0
@@ -87,7 +88,6 @@ def capacity_constraint(graph, theta=2):
     P0 = costToPtrans01(C0, eps, nr)
 
     struct1 = inequalityConstraintCapacity03(C0,P0,source,sink,S,theta)
-
     PassageReel = np.dot(struct1["ArcPassages"],TotalCap)
 
     Maxflow = 0
@@ -228,9 +228,3 @@ def rspKullbackPref01(C0,P0,theta,i,j):
     MEstruct["DestinationFundamentalMatrix"] = zcj
 
     return MEstruct
-
-def print_matrix(A):
-    for i in range(len(A)):
-        for j in range(len(A[0])):
-            print(str(A[i,j])+" ", end='')
-        print("")
