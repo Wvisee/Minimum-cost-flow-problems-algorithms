@@ -2,9 +2,17 @@ from ..graph_functions.api import *
 import networkx as nx
 import sys
 
+#weight and capacity must not equal to 0
 def preflow_push(graph):
-    # add one source and one sink that connect multiple source and sink
-    source, sink = add_source_sink_maxflow(graph)
+
+    connect_all_source_or_sink = False
+    if multiple_source_or_sink(graph):
+        # add one source and one sink that connect multiple source and sink
+        source, sink = add_source_sink_maxflow(graph)
+        connect_all_source_or_sink = True
+    else:
+        source, sink = get_source_sink(graph)
+
     #transform graph to residual graph
     residual = graph_to_residual(graph)
     # init node excess
@@ -84,8 +92,11 @@ def preflow_push(graph):
             stack.append(active_node)
     #get maxflow
     maxflow = e[sink]
-    #delete virtual edge that connect multiple source and sink
-    remove_source_sink(residual, source, sink)
+
+    if connect_all_source_or_sink:
+        #delete virtual edge that connect multiple source and sink
+        remove_source_sink(residual, source, sink)
+
     #residual to graph
     graph = residual_to_graph(residual)
     return graph, maxflow

@@ -1,4 +1,4 @@
-from ..maximum_flow.preflow_push import *
+from ..maximum_flow.generic_augmenting_path import *
 from ..graph_functions.api import *
 
 '''
@@ -15,7 +15,7 @@ def cycle_canceling(graph):
     #link all source together with a source node, link all sink together with a sink node
     source, sink = add_source_sink_mincost(graph)
     #Establish a feasible flow x in the network => max flow algorithms
-    graph, max_flow = preflow_push(graph)
+    graph, max_flow = generic_augmenting_path(graph)
     #transform graph to residual network
     residual_network = graph_to_residual(graph)
     #check negative path

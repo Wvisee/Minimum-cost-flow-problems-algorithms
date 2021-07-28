@@ -1,5 +1,5 @@
 import networkx as nx
-from ..maximum_flow.preflow_push import *
+from ..maximum_flow.generic_augmenting_path import *
 from ..graph_functions.api import *
 import sys
 
@@ -15,7 +15,7 @@ def out_of_kilter(graph):
     #set potentials
     pi = [0 for i in range(len(graph.nodes()))]
     #find a feasible solution
-    graph, maxflow = preflow_push(graph)
+    graph, maxflow = generic_augmenting_path(graph)
     #print_graph(graph)
     #compute kilter number
     kilter_number = {}

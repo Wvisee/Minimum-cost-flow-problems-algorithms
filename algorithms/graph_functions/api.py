@@ -253,3 +253,18 @@ def print_matrix(A):
         for j in range(len(A[0])):
             print(str(A[i,j])+" ", end='')
         print("")
+
+def multiple_source_or_sink(graph):
+    source_count = 0
+    sink_count = 0
+    for node in graph.nodes():
+        if 'b' in graph.nodes[node]:
+            i = graph.nodes[node]['b']
+            if i < 0:
+                sink_count += 1
+            elif i > 0:
+                source_count += 1
+    if source_count > 1 or sink_count > 1:
+        return True
+    else:
+        return False
