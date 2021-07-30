@@ -4,12 +4,14 @@ np.seterr(divide='ignore', invalid='ignore')
 import math
 import networkx as nx
 import scipy as sp #for adjacency_matrix
+
 '''
 This code is the transformation of the capacity_contraint hitting written in MatLab
 into python3 code.
 It is the second algorithm of the paper
 Theta must lie between 0.00000001 and 20.0
 '''
+
 def capacity_constraint(graph, theta=2):
     #link all source and sink to a single node source and a single node sink
     source, sink = add_source_sink_maxflow_rsp_with_constraint(graph)
@@ -216,15 +218,15 @@ def rspKullbackPref01(C0,P0,theta,i,j):
                 P[i][j]= N[i][j]/Den[i][j]
             else:
                 P[i][j] = 0
-
+    '''
     ent = -(math.log(zcij) + theta * dij)
-
-    MEstruct["cost"] = dij
+    '''
+    #MEstruct["cost"] = dij
     MEstruct["ArcPassages"] = N
-    MEstruct["NodePassages"] = n
-    MEstruct["TransitionsProba"] = P
-    MEstruct["entropy"] = ent
+    #MEstruct["NodePassages"] = n
+    #MEstruct["TransitionsProba"] = P
+    #MEstruct["entropy"] = ent
     MEstruct["OriginFundamentalMatrix"] = zci
-    MEstruct["DestinationFundamentalMatrix"] = zcj
+    #MEstruct["DestinationFundamentalMatrix"] = zcj
 
     return MEstruct

@@ -2,14 +2,10 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import time
 from random import randrange
-#minimum cost flow algorithms
-from algorithms.minimum_flow.cycle_canceling import *
-from algorithms.minimum_flow.successive_shortest_path import *
-from algorithms.minimum_flow.primal_dual import *
-from algorithms.minimum_flow.out_of_kilter import *
+#randomized optimal flow algorithms
 from algorithms.minimum_flow.constrainedBoP_hitting import *
 from algorithms.minimum_flow.constrainedBoP_nonhitting import *
-from algorithms.minimum_flow.linear_programming import *
+from algorithms.maximum_flow.capacity_constraint import *
 #graph functions
 from algorithms.graph_functions.api import *
 
@@ -195,80 +191,91 @@ G10.nodes[1000]['b'] = -100
 list_of_dataset.append(G10)
 
 ####################################
-# Run Minimum Cost Flow Algorithms #
+# Randomized algorithms comparison #
 ####################################
 
-print("-- Cycle-canceling")
-tab_cycle = []
-for i in range(len(list_of_dataset)):
-    x = time.time()
-    for t in range(10):
-        graph, flow, cost = cycle_canceling(list_of_dataset[i].copy())
-    y = time.time()
-    tab_cycle.append(((y - x)/10))
-
-print("-- Successive shortest path")
-tab_successive = []
-for i in range(len(list_of_dataset)):
-    x = time.time()
-    for t in range(10):
-        graph, flow, cost = successive_shortest_path(list_of_dataset[i].copy())
-    y = time.time()
-    tab_successive.append(((y - x)/10))
-
-print("-- Primal dual")
-tab_primal = []
-for i in range(len(list_of_dataset)):
-    x = time.time()
-    for t in range(10):
-        graph, flow, cost = primal_dual(list_of_dataset[i].copy())
-    y = time.time()
-    tab_primal.append(((y - x)/10))
-
-print("-- Out-of-kilter")
-tab_kilter = []
-for i in range(len(list_of_dataset)):
-    x = time.time()
-    for t in range(10):
-        graph, flow, cost = out_of_kilter(list_of_dataset[i].copy())
-    y = time.time()
-    tab_kilter.append(((y - x)/10))
+theta_tab = [0.01, 0.1, 1, 2, 5, 10, 20]
 
 print("-- Constrained hitting bag-of-paths")
-tab_hitting = []
-for i in range(len(list_of_dataset)):
-    x = time.time()
-    for t in range(10):
-        graph, flow, cost = constrainedBop_hitting(list_of_dataset[i].copy())
-    y = time.time()
-    tab_hitting.append(((y - x)/10))
+total_tab = []
+for theta_val in theta_tab:
+    print(theta_val)
+    tab_hitting = []
+    for i in range(len(list_of_dataset)):
+        x = time.time()
+        cost = 0
+        for t in range(1):
+            graph, flow, cost = constrainedBop_hitting(list_of_dataset[i].copy(), theta=theta_val)
+        print(cost)
+        y = time.time()
+        tab_hitting.append(((y - x)/1))
+    total_tab.append(tab_hitting)
 
-print("-- Constrained non-hitting bag-of-paths")
-tab_nonhitting = []
-for i in range(len(list_of_dataset)):
-    x = time.time()
-    for t in range(10):
-        graph, flow, cost = constrainedBop_nonhitting(list_of_dataset[i].copy())
-    y = time.time()
-    tab_nonhitting.append(((y - x)/10))
-
-print("-- Linear programming with an optimize simplex method")
-tab_lin = []
-for i in range(len(list_of_dataset)):
-    x = time.time()
-    for t in range(10):
-        graph, flow, cost = linear_programming(list_of_dataset[i].copy())
-    y = time.time()
-    tab_lin.append(((y - x)/10))
-
-plt.plot([4, 6, 8, 22, 44, 100, 500, 1000],tab_cycle, label="cycle")
-plt.plot([4, 6, 8, 22, 44, 100, 500, 1000],tab_successive, label="successive")
-plt.plot([4, 6, 8, 22, 44, 100, 500, 1000],tab_primal, label="primal")
-plt.plot([4, 6, 8, 22, 44, 100, 500, 1000],tab_kilter, label="kilter")
-plt.plot([4, 6, 8, 22, 44, 100, 500, 1000],tab_hitting, label="hitting")
-plt.plot([4, 6, 8, 22, 44, 100, 500, 1000],tab_nonhitting, label="nonhitting")
-plt.plot([4, 6, 8, 22, 44, 100, 500, 1000],tab_lin, label="lin")
+plt.plot([4, 6, 8, 22, 44, 100, 500, 1000],total_tab[0], label="0.01")
+plt.plot([4, 6, 8, 22, 44, 100, 500, 1000],total_tab[1], label="0.1")
+plt.plot([4, 6, 8, 22, 44, 100, 500, 1000],total_tab[2], label="1")
+plt.plot([4, 6, 8, 22, 44, 100, 500, 1000],total_tab[3], label="2")
+plt.plot([4, 6, 8, 22, 44, 100, 500, 1000],total_tab[4], label="5")
+plt.plot([4, 6, 8, 22, 44, 100, 500, 1000],total_tab[5], label="10")
+plt.plot([4, 6, 8, 22, 44, 100, 500, 1000],total_tab[6], label="20")
 plt.ylabel('time in seconds')
 plt.xlabel('number of nodes')
 plt.legend()
-plt.savefig('minimumcostflow.png')
+plt.savefig('hitting_bop.png')
+plt.clf()
+
+print("-- Constrained non-hitting bag-of-paths")
+total_tab = []
+for theta_val in theta_tab:
+    print(theta_val)
+    tab_nonhitting = []
+    for i in range(len(list_of_dataset)):
+        x = time.time()
+        cost = 0
+        for t in range(1):
+            graph, flow, cost = constrainedBop_nonhitting(list_of_dataset[i].copy(), theta=theta_val)
+        print(cost)
+        y = time.time()
+        tab_nonhitting.append(((y - x)/1))
+    total_tab.append(tab_nonhitting)
+
+plt.plot([4, 6, 8, 22, 44, 100, 500, 1000],total_tab[0], label="0.01")
+plt.plot([4, 6, 8, 22, 44, 100, 500, 1000],total_tab[1], label="0.1")
+plt.plot([4, 6, 8, 22, 44, 100, 500, 1000],total_tab[2], label="1")
+plt.plot([4, 6, 8, 22, 44, 100, 500, 1000],total_tab[3], label="2")
+plt.plot([4, 6, 8, 22, 44, 100, 500, 1000],total_tab[4], label="5")
+plt.plot([4, 6, 8, 22, 44, 100, 500, 1000],total_tab[5], label="10")
+plt.plot([4, 6, 8, 22, 44, 100, 500, 1000],total_tab[6], label="20")
+plt.ylabel('time in seconds')
+plt.xlabel('number of nodes')
+plt.legend()
+plt.savefig('non_hitting.png')
+plt.clf()
+
+theta_tab = [0.01, 0.1, 1, 2, 5, 10]
+print("-- Randomized short path with capacity constraint")
+total_tab = []
+for theta_val in theta_tab:
+    print(theta_val)
+    tab_capacity = []
+    for i in range(len(list_of_dataset)):
+        x = time.time()
+        maxflow = 0
+        for t in range(1):
+            graph, maxflow = capacity_constraint(list_of_dataset[i].copy(), theta=theta_val)
+        print(maxflow)
+        y = time.time()
+        tab_capacity.append(((y - x)/1))
+    total_tab.append(tab_capacity)
+
+plt.plot([4, 6, 8, 22, 44, 100, 500, 1000],total_tab[0], label="0.01")
+plt.plot([4, 6, 8, 22, 44, 100, 500, 1000],total_tab[1], label="0.1")
+plt.plot([4, 6, 8, 22, 44, 100, 500, 1000],total_tab[2], label="1")
+plt.plot([4, 6, 8, 22, 44, 100, 500, 1000],total_tab[3], label="2")
+plt.plot([4, 6, 8, 22, 44, 100, 500, 1000],total_tab[4], label="5")
+plt.plot([4, 6, 8, 22, 44, 100, 500, 1000],total_tab[5], label="10")
+#plt.plot([4, 6, 8, 22, 44, 100, 500, 1000],total_tab[6], label="15")
+plt.ylabel('time in seconds')
+plt.xlabel('number of nodes')
+plt.legend()
+plt.savefig('rsp_capa.png')
