@@ -5,6 +5,7 @@ from algorithms.maximum_flow.generic_augmenting_path import *
 from algorithms.maximum_flow.preflow_push import *
 from algorithms.maximum_flow.capacity_constraint import *
 from algorithms.maximum_flow.linear_programming import *
+from algorithms.maximum_flow.linear_programming_cvx import *
 #graph functions
 from algorithms.graph_functions.api import *
 
@@ -181,6 +182,12 @@ for i in range(len(list_of_dataset)):
 print("-- Linear programming with an optimize simplex method")
 for i in range(len(list_of_dataset)):
     graph, maxflow = linear_programming(list_of_dataset[i].copy())
+    print("Solution of dataset n°"+str(i+1)+" : Maxflow = "+str(maxflow))
+    #print_graph(graph)
+#Linear programming with an optimize simplex method
+print("-- Linear programming with CVX")
+for i in range(len(list_of_dataset)):
+    graph, maxflow = linear_programming_cvx(list_of_dataset[i].copy())
     print("Solution of dataset n°"+str(i+1)+" : Maxflow = "+str(maxflow))
     #print_graph(graph)
 #Randomized short path with capacity constraint

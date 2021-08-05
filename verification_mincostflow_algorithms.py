@@ -8,6 +8,7 @@ from algorithms.minimum_flow.out_of_kilter import *
 from algorithms.minimum_flow.constrainedBoP_hitting import *
 from algorithms.minimum_flow.constrainedBoP_nonhitting import *
 from algorithms.minimum_flow.linear_programming import *
+from algorithms.minimum_flow.linear_programming_cvx import *
 #graph functions
 from algorithms.graph_functions.api import *
 
@@ -214,5 +215,11 @@ for i in range(len(list_of_dataset)):
 print("-- Linear programming with an optimize simplex method")
 for i in range(len(list_of_dataset)):
     graph, flow, cost = linear_programming(list_of_dataset[i].copy())
+    print("Solution of dataset n°"+str(i+1)+" : Flow = "+str(flow)+" : Cost = "+str(cost))
+    #print_graph(graph)
+#Linear programming
+print("-- Linear programming with CVX")
+for i in range(len(list_of_dataset)):
+    graph, flow, cost = linear_programming_cvx(list_of_dataset[i].copy())
     print("Solution of dataset n°"+str(i+1)+" : Flow = "+str(flow)+" : Cost = "+str(cost))
     #print_graph(graph)
